@@ -1,59 +1,58 @@
-from Tkinter import *
+from __future__ import division
 import RPi.GPIO as GPIO
 import time
-import os
-import threading
-from multiprocessing import Process, Manager
-from turret import TurretPlatform
+
+# Import the PCA9685 module.
+import Adafruit_PCA9685
 #constants
+CHANNEL_X = 1
+CHANNEL_Y = 0
+LASER_PIN = 37
 
-SERVOX_OUT_PIN = 11
-SERVOY_OUT_PIN = 7
-
-LASER_PIN = 13
-
-SERVO_MIN_POS = 2.500
-SERVO_NEUTRAL = 7.500
-SERVO_MAX_POS = 12.500
+SERVO_MIN_POS = 200
+SERVO_NEUTRAL = 400
+SERVO_MAX_POS = 600
 
 SERVO_RANGE = SERVO_MAX_POS - SERVO_MIN_POS
 
-LIMIT_RANGE_X=.3
+#settings for face @ 4 feet
+LIMIT_RANGE_X=.4
 LIMIT_RANGE_Y=.3
 
-OFFSETX = 1.15
-OFFSETY = .85
+OFFSETX = -25
+OFFSETY =30
+
 
 class LaserArm:
 
     def __init__(self, maxXInput, maxYInput):
-        GPIO.setup(SERVOX_OUT_PIN, GPIO.OUT)
-        GPIO.setup(SERVOY_OUT_PIN, GPIO.OUT)
         GPIO.setup(LASER_PIN, GPIO.OUT)
         GPIO.output(LASER_PIN, 1)
+        self.pwm = Adafruit_PCA9685.PCA9685()
+        self.pwm.set_pwm_freq(60)
         self.maxXInput = maxXInput
         self.maxYInput =maxYInput
-        self.servo_pulseX = GPIO.PWM(SERVOX_OUT_PIN,60)
-        self.servo_pulseY = GPIO.PWM(SERVOY_OUT_PIN,60)
-        self.resetLaser()
+        # default face size @ 4 feet
+        self.objectHeight = 55
+        self.objectWidth = 55
 
-    def resetLaser(self):
-        self.servo_pulseX.start(SERVO_NEUTRAL)
-        self.servo_pulseY.start(SERVO_NEUTRAL)
-
-    def laserOff(self):
-        GPIO.output(LASER_PIN, 0)
-        self.resetLaser(self)
+    def setLaser(self, value):
+        GPIO.output(LASER_PIN, value)
 
     def position(self, x, y):
         dutyX = ((SERVO_NEUTRAL+OFFSETX) - (((x/self.maxXInput)*SERVO_RANGE)-SERVO_RANGE/2) * LIMIT_RANGE_X)
-        dutyY = ((SERVO_NEUTRAL+OFFSETY) - (((y/self.maxYInput)*SERVO_RANGE)-SERVO_RANGE/2) * LIMIT_RANGE_Y)
-        self.servo_pulseX.ChangeDutyCycle(round(dutyX,3))
-        self.servo_pulseY.ChangeDutyCycle(round(dutyY,3))
+        dutyY = ((SERVO_NEUTRAL+OFFSETY) + (((y/self.maxYInput)*SERVO_RANGE)-SERVO_RANGE/2) * LIMIT_RANGE_Y)
+
+        self.pwm.set_pwm(CHANNEL_X, 0, int(round(dutyX)))
+        self.pwm.set_pwm(CHANNEL_Y, 0, int(round(dutyY)))
+        print ('Laser moving to...', dutyX, dutyY, 'pwm...', int(round(dutyX)), int(round(dutyX)))
 
     def positionPercent(self, xPercent, yPercent):
         self.position(self.maxXInput*xPercent, self.maxYInput*yPercent)
 
+    def setScale(self, width, height):
+        self.objectWidth = width
+        self.objectHeight = height
 
     def motion(self, event):
         self.position(event.x, event.y)
