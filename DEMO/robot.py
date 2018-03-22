@@ -11,20 +11,28 @@ from eye import Eye
 from PIL import Image
 from PIL import ImageTk
 
-BOX_MAX_X = 499.000
-BOX_MAX_Y = 499.000
-
-CAM_RES = (640, 480)
+INPUT_WINDOW_SIZE = (320.000, 240.000)
+CAM_RES = (320, 240)
 
 class InputWindow:
     def __init__(self, robot):
         self.robot = robot
-        self.inputFrame = Frame(self.robot.root, width=BOX_MAX_X, height=BOX_MAX_Y)
+        text = StringVar()
+        text.set("Mouse around to guide laser, L/R click to pan, Press ESC to close")
+        self.inputFrame = Frame(robot.root, width=INPUT_WINDOW_SIZE[0], height=INPUT_WINDOW_SIZE[1])
+        self.label = Label(robot.root, textvariable=text)
         self.inputFrame.bind('<Motion>', lambda event: robot.arm.motion(event))
-        self.inputFrame.bind('<ButtonPress-1>', lambda event: robot.platform.startRotation("L"))
+        self.inputFrame.bind('<ButtonPress-1>', lambda event: robot.platform.startRotation("R"))
         self.inputFrame.bind('<ButtonRelease-1>', lambda event: robot.platform.stopRotation())
-        self.inputFrame.bind('<ButtonPress-3>', lambda event: robot.platform.startRotation("R"))
+        self.inputFrame.bind('<ButtonPress-3>', lambda event: robot.platform.startRotation("L"))
         self.inputFrame.bind('<ButtonRelease-3>', lambda event: robot.platform.stopRotation())
+        self.robot.root.bind('<space>', lambda event: robot.arm.captureCenter())
+        self.robot.root.bind('f', lambda event: robot.toggleTracking())
+        self.robot.root.bind('x', lambda event: robot.arm.captureRange('x'))
+        self.robot.root.bind('y', lambda event: robot.arm.captureRange('y'))
+        self.robot.root.bind('r', lambda event: robot.arm.setDefaults())
+        self.robot.root.bind('<Escape>', lambda event: robot.kill())
+        self.label.pack()
         self.inputFrame.pack()
 
 class OutputWindow:
@@ -32,20 +40,22 @@ class OutputWindow:
         self.root = root
         self.robot = robot
         self.frame = Frame(self.root)
-        self.calibrating = None
-        self.quitButton = Button(self.frame, text = 'Done', width = 25, command = self.close_windows)
+        self.quitButton = Button(self.frame, text = 'Close', width = 25, command = self.close_windows)
         self.quitButton.pack()
-        self.thread = threading.Thread(target=self.videoLoop, args=())
+        self.thread = threading.Thread(target=robot.eye.videoLoop, args=(self,))
         self.thread.start()
         self.panel = None
         self.frame.pack()
 
-    def drawGuidesAndText(self, frame, guides, infoText):
+    def drawGuidesAndText(self, frame, guides):
+
+        modeText = 'MANUAL CONTROL + TRACKING' if self.robot.isTracking else 'MANUAL CONTROL'
+        cv2.putText(frame , modeText, (0,10), cv2.FONT_HERSHEY_SIMPLEX, .4, (255,255,255), 1) # place text over image
+        cv2.putText(frame, '<f> to toggle face tracking', (0,25), 16, .3, (255,255,255), 1)
+
+
         # draw guides on the image based on list 'guides.' Ex 3x3 box guides position naming (x, y), F= first, M = mid, L = last
-        # FF, MF, LF
-        # FM, MM, LM
-        # FL, ML, LL
-        # print the provided guides otherwise print all the guides
+        getPosition = lambda (i, x): 0 if x == 'F' else guidePositions[x](i)
         guides = ['FF', 'FM', 'FL', 'MF', 'MM', 'ML', 'LF', 'LM', 'LL'] if len(guides) ==0 or guides[0] == 'All' else guides
         guideBoxSize = 10 # size of guide box
         guidePositions = { # lambda fn to find top-left starting point of the guide boxes M & L (always 0 for 'F = first')
@@ -53,32 +63,31 @@ class OutputWindow:
             'L': lambda axis:CAM_RES[axis] - guideBoxSize
         }
 
-        for guideKey in guides:
-            guideStartPos = map(lambda (i, x): 0 if x == 'F' else guidePositions[x](i), enumerate(guideKey)) # map the x and y for the start point of the guidebox depending on the letter Fist,Middle,Last
-            guideEndPos = (guideStartPos[0] + guideBoxSize, guideStartPos[1] + guideBoxSize) # guide ends at the position ex. 10,10 from start
-            cv2.rectangle(frame, tuple(guideStartPos), guideEndPos, (255,255,255), 1) # paint this guide
+        if self.robot.isTracking:
+            faces = self.robot.trackingHaar.detectMultiScale(frame, 1.1, 5)
+            for (x,y,w,h) in faces:
+                xPercent = float(x+(w/2))/float(self.robot.eye.camera.resolution[0]);
+                yPercent = float(y+(h/2))/float(self.robot.eye.camera.resolution[1]);
 
-        cv2.putText(frame ,infoText, (10,50), cv2.FONT_HERSHEY_SIMPLEX, .5, (255,255,255), 2) # place text over image
+                self.robot.arm.positionPercent(xPercent,yPercent)
+        else:
+            for guideKey in guides:
+                guideStartPos = map(getPosition, enumerate(guideKey)) # map the x and y for the start point of the guidebox depending on the letter Fist,Middle,Last
+                guideEndPos = (guideStartPos[0] + guideBoxSize, guideStartPos[1] + guideBoxSize) # guide ends at the position ex. 10,10 from start
+                cv2.rectangle(frame, tuple(guideStartPos), guideEndPos, (255,255,255), 1) # paint this guide
 
-    def videoLoop(self):
-        try:
-            for frame in self.robot.eye.camera.capture_continuous(self.robot.eye.rawCapture, format="bgr", use_video_port=True):
-                image = frame.array
-                grayImg = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                self.drawGuidesAndText(grayImg, ['All'], 'Hi Mom!')
-                grayImg= Image.fromarray(grayImg)
-                grayPhotoImg = ImageTk.PhotoImage(grayImg)
-                if self.panel is None:
-                    self.panel = Label(self.frame, image=grayPhotoImg)
-                    self.panel.image = grayPhotoImg
-                    self.panel.pack(padx=10, pady=10)
-                else:
-                    self.panel.configure(image=grayPhotoImg)
-                    self.panel.image = grayPhotoImg
-                self.robot.eye.rawCapture.truncate(0)
+            # calibrate instructions
+            cv2.putText(frame, 'CALIBRATION STEPS,  <r> reset defaults', (0,50), cv2.FONT_HERSHEY_SIMPLEX, .3, (255,255,255), 1) # place text over image
+            cv2.putText(frame, '  Focus laser into box and press <key>', (0,65), 16, .3, (255,255,255), 1) # place text over image
 
-        except RuntimeError, e:
-            print("[INFO] caught a RuntimeError")
+            middleTextPos = tuple(map(getPosition, enumerate('MM')))
+            cv2.putText(frame, '1. <SPACE> capture center', (middleTextPos[0], middleTextPos[1]+guideBoxSize*2+5), cv2.FONT_HERSHEY_SIMPLEX, .3, (255,255,255), 1) # place text over image
+
+            leftTextPos = tuple(map(getPosition, enumerate('FM')))
+            cv2.putText(frame, '2. <x> capture x-edge', (leftTextPos[0], leftTextPos[1]+guideBoxSize*2+5), cv2.FONT_HERSHEY_SIMPLEX, .3, (255,255,255), 1) # place text over image
+            #
+            topTextPos = tuple(map(getPosition, enumerate('MF')))
+            cv2.putText(frame, '3. <y> capture y-edge', (topTextPos[0], topTextPos[1]+guideBoxSize*2+5), cv2.FONT_HERSHEY_SIMPLEX, .3, (255,255,255), 1) # place text over image
 
     def close_windows(self):
         self.root.destroy()
@@ -88,24 +97,18 @@ class Robot:
     def __init__(self):
         GPIO.setmode(GPIO.BOARD)
         self.platform = TurretPlatform()
-        self.arm = LaserArm(BOX_MAX_X, BOX_MAX_Y)
+        self.arm = LaserArm(INPUT_WINDOW_SIZE)
         self.root = Tk()
-        self.eye = Eye(CAM_RES[0],CAM_RES[1],30)
-        self.inputFrame = Frame(self.root, width=BOX_MAX_X, height=BOX_MAX_Y)
-        self.inputFrame.bind('<Motion>', lambda event: self.arm.motion(event))
-        self.inputFrame.bind('<ButtonPress-1>', lambda event: self.platform.startRotation("L"))
-        self.inputFrame.bind('<ButtonRelease-1>', lambda event: self.platform.stopRotation())
-        self.inputFrame.bind('<ButtonPress-3>', lambda event: self.platform.startRotation("R"))
-        self.inputFrame.bind('<ButtonRelease-3>', lambda event: self.platform.stopRotation())
-        self.inputFrame.bind('<ButtonPress-2>', lambda event: self.calibrateTest('w'))
+        self.eye = Eye(CAM_RES[0],CAM_RES[1],10)
+        self.isTracking = False
+        self.trackingHaar = cv2.CascadeClassifier('../CAM/haar/haarcascade_frontalface_default.xml')
 
-    def calibrateTest(self, textMsg):
-        print textMsg
+    def toggleTracking(self):
+        self.isTracking = not self.isTracking
 
     def run(self):
         self.app = InputWindow(self)
         self.app = OutputWindow(Toplevel(self.root), self)
-        self.root.bind('<space>', lambda event: self.kill())
         self.root.mainloop()
 
     def kill(self):

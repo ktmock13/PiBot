@@ -2,7 +2,7 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
 import cv2
-import Tkinter
+from Tkinter import *
 import Image, ImageTk
 
 class Eye:
@@ -65,7 +65,6 @@ class Eye:
                 self.objectWidth = w
                 self.objectHeight = h
                 arm.positionPercent(self.xPercent,self.yPercent)
-                arm.setScale(w,h)
 
             print ('Face at percents...', self.xPercent,self.yPercent, '  Face dims...', self.objectWidth, self.objectHeight)
             # go to face
@@ -94,3 +93,32 @@ class Eye:
         	# if the `q` key was pressed, break from the loop
         	if key == ord("x"):
         		break
+
+    def videoLoop(self, outputWindow):
+        try:
+            for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
+                image = frame.array
+                grayImg = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+                # cv2.putText(grayImg, 'FACE TRACKING, <f> to toggle', (0,45), 16, .35, (255,255,255), 1)
+                outputWindow.drawGuidesAndText(grayImg, ['MM', 'FM', 'MF'])
+
+                if outputWindow.robot.isTracking:
+                    faces = outputWindow.robot.trackingHaar.detectMultiScale(grayImg, 1.1, 5)
+                    for (x,y,w,h) in faces:
+                        xPercent = float(x+(w/2))/float(outputWindow.robot.eye.camera.resolution[0]);
+                        yPercent = float(y+(h/2))/float(outputWindow.robot.eye.camera.resolution[1]);
+                        outputWindow.robot.arm.positionPercent(xPercent, yPercent)
+
+                grayImg= Image.fromarray(grayImg)
+                grayPhotoImg = ImageTk.PhotoImage(grayImg)
+                if outputWindow.panel is None: # create and mount panel if it's not there
+                    outputWindow.panel = Label(outputWindow.frame, image=grayPhotoImg)
+                    outputWindow.panel.image = grayPhotoImg
+                    outputWindow.panel.pack(padx=10, pady=10)
+                else:
+                    outputWindow.panel.configure(image=grayPhotoImg)
+                    outputWindow.panel.image = grayPhotoImg
+                self.rawCapture.truncate(0)
+
+        except RuntimeError, e:
+            print("[INFO] caught a RuntimeError")
