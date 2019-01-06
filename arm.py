@@ -19,7 +19,7 @@ class LaserArm:
         self.reset(maxInputs)
 
     def reset(self, maxInputs):
-        self.pwm = Adafruit_PCA9685.PCA9685()
+        self.pwm = Adafruit_PCA9685.PCA9685() # uses pins 3,5 by default (i2c)
         self.pwm.set_pwm_freq(50)
         self.maxInputs = { 'x': maxInputs[0], 'y': maxInputs[1] }
         self.center = { 'x': ROUGH_CENTER[0], 'y': ROUGH_CENTER[1] } # values to correct center
