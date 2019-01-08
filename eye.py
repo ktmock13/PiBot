@@ -3,7 +3,8 @@ from picamera import PiCamera
 import time
 import cv2
 from Tkinter import *
-import Image, ImageTk
+from PIL import Image
+from PIL import ImageTk
 
 class Eye:
     #relays information to 4 pins where there all steppers invloving rotation should be plugged
