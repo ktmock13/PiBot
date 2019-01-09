@@ -36,7 +36,7 @@ class LaserArm:
         self.pwm.set_pwm(CHANNEL_X, 0, int(round(dutyX)))
         self.pwm.set_pwm(CHANNEL_Y, 0, int(round(dutyY)))
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
-        print "x %d y %d" (round(dutyX), round(dutyY))
+        print "x %d y %d" % (round(dutyX), round(dutyY))
 
     def positionPercent(self, xPercent, yPercent):
         self.position(self.maxInputs['x'] * xPercent, self.maxInputs['y'] * yPercent)
