@@ -20,7 +20,7 @@ class LaserArm:
 
     def reset(self, maxInputs):
         self.pwm = Adafruit_PCA9685.PCA9685() # uses pins 3,5 by default (i2c)
-        self.pwm.set_pwm_freq(60)
+        self.pwm.set_pwm_freq(50)
         self.maxInputs = { 'x': maxInputs[0], 'y': maxInputs[1] }
         self.center = { 'x': ROUGH_CENTER[0], 'y': ROUGH_CENTER[1] } # values to correct center
         self.range = { 'x': 100, 'y': 100 }  # 'point' distance servo may deviate from center on X,Y axis = 100
@@ -36,6 +36,7 @@ class LaserArm:
         self.pwm.set_pwm(CHANNEL_X, 0, int(round(dutyX)))
         self.pwm.set_pwm(CHANNEL_Y, 0, int(round(dutyY)))
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
+        print "x %d y %d" (round(dutyX), round(dutyY))
 
     def positionPercent(self, xPercent, yPercent):
         self.position(self.maxInputs['x'] * xPercent, self.maxInputs['y'] * yPercent)
