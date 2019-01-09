@@ -109,15 +109,15 @@ class Eye:
                 #         yPercent = float(y+(h/2))/float(outputWindow.robot.eye.camera.resolution[1]);
                 #         outputWindow.robot.arm.positionPercent(xPercent, yPercent)
 
-                grayImg= Image.fromarray(grayImg)
-                grayPhotoImg = ImageTk.PhotoImage(grayImg)
-                if outputWindow.panel is None: # create and mount panel if it's not there
-                    outputWindow.panel = Label(outputWindow.frame, image=grayPhotoImg)
-                    outputWindow.panel.image = grayPhotoImg
-                    outputWindow.panel.pack(padx=10, pady=10)
-                else:
-                    outputWindow.panel.configure(image=grayPhotoImg)
-                    outputWindow.panel.image = grayPhotoImg
+                # grayImg= Image.fromarray(grayImg)
+                # grayPhotoImg = ImageTk.PhotoImage(grayImg)
+                # if outputWindow.panel is None: # create and mount panel if it's not there
+                #     outputWindow.panel = Label(outputWindow.frame, image=grayPhotoImg)
+                #     outputWindow.panel.image = grayPhotoImg
+                #     outputWindow.panel.pack(padx=10, pady=10)
+                # else:
+                #     outputWindow.panel.configure(image=grayPhotoImg)
+                #     outputWindow.panel.image = grayPhotoImg
                 self.rawCapture.truncate(0)
 
         except RuntimeError, e:
