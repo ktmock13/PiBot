@@ -103,12 +103,12 @@ class Eye:
                 # cv2.putText(grayImg, 'FACE TRACKING, <f> to toggle', (0,45), 16, .35, (255,255,255), 1)
                 outputWindow.drawGuidesAndText(grayImg, ['MM', 'FM', 'MF'])
 
-                if outputWindow.robot.isTracking:
-                    faces = outputWindow.robot.trackingHaar.detectMultiScale(grayImg, 1.1, 5)
-                    for (x,y,w,h) in faces:
-                        xPercent = float(x+(w/2))/float(outputWindow.robot.eye.camera.resolution[0]);
-                        yPercent = float(y+(h/2))/float(outputWindow.robot.eye.camera.resolution[1]);
-                        outputWindow.robot.arm.positionPercent(xPercent, yPercent)
+                # if outputWindow.robot.isTracking:
+                #     faces = outputWindow.robot.trackingHaar.detectMultiScale(grayImg, 1.1, 5)
+                #     for (x,y,w,h) in faces:
+                #         xPercent = float(x+(w/2))/float(outputWindow.robot.eye.camera.resolution[0]);
+                #         yPercent = float(y+(h/2))/float(outputWindow.robot.eye.camera.resolution[1]);
+                #         outputWindow.robot.arm.positionPercent(xPercent, yPercent)
 
                 grayImg= Image.fromarray(grayImg)
                 grayPhotoImg = ImageTk.PhotoImage(grayImg)
