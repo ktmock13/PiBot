@@ -53,7 +53,7 @@ class Eye:
                 break
 
     def followFaceWithArm(self, arm):
-        face_cascade = cv2.CascadeClassifier('../CAM/haar/haarcascade_frontalface_default.xml')
+        face_cascade = cv2.CascadeClassifier('object_recognition/haarcascade_frontalface_default.xml')
         for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
 
             image = frame.array
