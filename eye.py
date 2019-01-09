@@ -100,8 +100,7 @@ class Eye:
             for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
                 image = frame.array
                 grayImg = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                # cv2.putText(grayImg, 'FACE TRACKING, <f> to toggle', (0,45), 16, .35, (255,255,255), 1)
-                outputWindow.drawGuidesAndText(grayImg, ['MM', 'FM', 'MF'])
+                # outputWindow.drawGuidesAndText(grayImg, ['MM', 'FM', 'MF'])
 
                 # if outputWindow.robot.isTracking:
                 #     faces = outputWindow.robot.trackingHaar.detectMultiScale(grayImg, 1.1, 5)
