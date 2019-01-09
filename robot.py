@@ -101,7 +101,7 @@ class Robot:
         self.root = Tk()
         self.eye = Eye(CAM_RES[0],CAM_RES[1],10)
         self.isTracking = False
-        self.trackingHaar = cv2.CascadeClassifier('../CAM/haar/haarcascade_frontalface_default.xml')
+        self.trackingHaar = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
     def toggleTracking(self):
         self.isTracking = not self.isTracking
