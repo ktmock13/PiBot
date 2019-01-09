@@ -5,8 +5,8 @@ import time
 # Import the PCA9685 module.
 import Adafruit_PCA9685
 #constants
-CHANNEL_X = 1
-CHANNEL_Y = 0
+CHANNEL_X = 3
+CHANNEL_Y = 11
 LASER_PIN = 37
 ROUGH_CENTER = (310, 340)
 
