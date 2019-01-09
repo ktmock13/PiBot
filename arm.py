@@ -43,14 +43,14 @@ class LaserArm:
 
     def captureCenter(self):
         self.center = self.duties
-        print "center %s" % (self.duties)
+        # print "center %s" % (self.duties)
 
     def setDefaults(self):
         self.reset((self.maxInputs['x'], self.maxInputs['y']))
 
     def captureRange(self, axis):
         self.range[axis] = abs(self.duties[axis] - self.center[axis])
-        print "range %s" % (self.range[axis])
+        # print "range %s" % (self.range[axis])
 
     def motion(self, event):
         self.position(event.x, event.y)
