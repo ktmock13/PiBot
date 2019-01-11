@@ -38,6 +38,16 @@ class LaserArm:
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
         print "x %d y %d" % (round(dutyX), round(dutyY))
 
+    def resetServos(self, x, y):
+        dutyX = ((self.center['x']) - (((x / self.maxInputs['x']) * self.range['x'] * 2) - self.range['x']))
+        dutyY = ((self.center['y']) + (((y / self.maxInputs['y']) * self.range['y'] * 2) - self.range['y']))
+        print "maxxing  x %d y %d" % (round(dutyX), round(dutyY))
+        self.pwm.set_pwm(CHANNEL_X, 0, 0)
+        self.pwm.set_pwm(CHANNEL_Y, 0, 0)
+        sleep(2);
+        self.position(self.center['x'], self.center['y'])
+        print "centering x %d y %d" % (round(dutyX), round(dutyY))
+
     def positionPercent(self, xPercent, yPercent):
         self.position(self.maxInputs['x'] * xPercent, self.maxInputs['y'] * yPercent)
 

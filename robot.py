@@ -31,6 +31,7 @@ class InputWindow:
         self.robot.root.bind('x', lambda event: robot.arm.captureRange('x'))
         self.robot.root.bind('y', lambda event: robot.arm.captureRange('y'))
         self.robot.root.bind('r', lambda event: robot.arm.setDefaults())
+        self.robot.root.bind('s', lambda event: robot.arm.resetServos())
         self.robot.root.bind('<Escape>', lambda event: robot.kill())
         self.label.pack()
         self.inputFrame.pack()
