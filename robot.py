@@ -67,6 +67,10 @@ class OutputWindow:
             'M': lambda axis: CAM_RES[axis]/2 - guideBoxSize/2,
             'L': lambda axis:CAM_RES[axis] - guideBoxSize
         }
+        
+
+
+        gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
 
         if self.robot.isTracking:
             faces = self.robot.trackingHaar.detectMultiScale(frame, 1.1, 5)
