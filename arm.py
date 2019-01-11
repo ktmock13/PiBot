@@ -36,11 +36,21 @@ class LaserArm:
         self.pwm.set_pwm(CHANNEL_Y, 0, int(round(dutyY)))
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
 
+    def directionalMove(self, direction):
+        if direction == 'L':
+
+
     def positionPercent(self, xPercent, yPercent):
         self.position(self.maxInputs['x'] * xPercent, self.maxInputs['y'] * yPercent)
 
     def captureCenter(self):
         self.center = self.duties
+    
+    def printSettings(self):
+        print ('maxInputs: ', self.maxInputs)
+        print ('center: ', self.center)
+        print ('range: ', self.range)
+        print ('duties: ', self.duties)
 
     def setDefaults(self):
         self.reset((self.maxInputs['x'], self.maxInputs['y']))
