@@ -45,7 +45,7 @@ class LaserArm:
         self.pwm.set_pwm(CHANNEL_X, 0, 0)
         self.pwm.set_pwm(CHANNEL_Y, 0, 0)
         sleep(2);
-        self.position(self.center['x'], self.center['y'])
+        # self.position(self.center['x'], self.center['y'])
         print "centering x %d y %d" % (round(dutyX), round(dutyY))
 
     def positionPercent(self, xPercent, yPercent):
