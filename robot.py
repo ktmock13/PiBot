@@ -67,17 +67,13 @@ class OutputWindow:
             'M': lambda axis: CAM_RES[axis]/2 - guideBoxSize/2,
             'L': lambda axis:CAM_RES[axis] - guideBoxSize
         }
-        
-
-
-        gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
 
         if self.robot.isTracking:
             faces = self.robot.trackingHaar.detectMultiScale(frame, 1.1, 5)
             for (x,y,w,h) in faces:
                 xPercent = float(x+(w/2))/float(self.robot.eye.camera.resolution[0]);
                 yPercent = float(y+(h/2))/float(self.robot.eye.camera.resolution[1]);
-                cv2.rectangle(gray,(x,y),(x+w,y+h),(255,255,0),1)
+                cv2.rectangle(frame,(x,y),(x+w,y+h),(255,255,0),1)
 
                 print ('Face at percents...', xPercent, yPercent)
                 self.robot.arm.positionPercent(xPercent,yPercent)
