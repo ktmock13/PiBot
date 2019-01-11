@@ -69,7 +69,7 @@ class OutputWindow:
             for (x,y,w,h) in faces:
                 xPercent = float(x)/float(self.robot.eye.camera.resolution[0]);
                 yPercent = float(y)/float(self.robot.eye.camera.resolution[1]);
-                print ('Face at percents...', xPercent, yPercent, 'Size...', w, ' x ' h)
+                print ('Face at percents...', xPercent, yPercent, 'Size...', w, ' x ', h)
                 self.robot.arm.positionPercent(xPercent,yPercent)
         else:
             for guideKey in guides:
