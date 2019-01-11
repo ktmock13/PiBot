@@ -8,7 +8,7 @@ import Adafruit_PCA9685
 CHANNEL_X = 3
 CHANNEL_Y = 11
 LASER_PIN = 37
-ROUGH_CENTER = (211, 353)
+ROUGH_CENTER = (240, 180)
 
 
 class LaserArm:
@@ -36,13 +36,13 @@ class LaserArm:
         self.pwm.set_pwm(CHANNEL_Y, 0, int(round(dutyY)))
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
 
-    def resetServos(self):
-        print "maxxing..."
-        self.pwm.set_pwm(CHANNEL_X, 0, 1000)
-        self.pwm.set_pwm(CHANNEL_Y, 0, 1000)
-        time.sleep(2)
-        self.position(self.center['x'], self.center['y'])
-        print "centering x %d y %d" % (round(dutyX), round(dutyY))
+    # def resetServos(self):
+    #     print "maxxing..."
+    #     self.pwm.set_pwm(CHANNEL_X, 0, 1000)
+    #     self.pwm.set_pwm(CHANNEL_Y, 0, 1000)
+    #     time.sleep(2)
+    #     self.position(self.center['x'], self.center['y'])
+    #     print "centering x %d y %d" % (round(dutyX), round(dutyY))
 
     def positionPercent(self, xPercent, yPercent):
         self.position(self.maxInputs['x'] * xPercent, self.maxInputs['y'] * yPercent)
