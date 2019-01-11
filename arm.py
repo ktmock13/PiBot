@@ -8,7 +8,7 @@ import Adafruit_PCA9685
 CHANNEL_X = 3
 CHANNEL_Y = 11
 LASER_PIN = 37
-ROUGH_CENTER = (200, 300)
+ROUGH_CENTER = (211, 353)
 
 
 class LaserArm:
@@ -20,10 +20,10 @@ class LaserArm:
 
     def reset(self, maxInputs):
         self.pwm = Adafruit_PCA9685.PCA9685() # uses pins 3,5 by default (i2c)
-        self.pwm.set_pwm_freq(50)
+        self.pwm.set_pwm_freq(60)
         self.maxInputs = { 'x': maxInputs[0], 'y': maxInputs[1] }
         self.center = { 'x': ROUGH_CENTER[0], 'y': ROUGH_CENTER[1] } # values to correct center
-        self.range = { 'x': 80, 'y': 80 }  # 'point' distance servo may deviate from center on X,Y axis = 100
+        self.range = { 'x': 100, 'y': 100 }  # 'point' distance servo may deviate from center on X,Y axis = 100
         self.duties = self.center
 
     def setLaser(self, value):
@@ -36,13 +36,13 @@ class LaserArm:
         self.pwm.set_pwm(CHANNEL_Y, 0, int(round(dutyY)))
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
 
-    # def resetServos(self):
-    #     print "maxxing..."
-    #     self.pwm.set_pwm(CHANNEL_X, 0, 1000)
-    #     self.pwm.set_pwm(CHANNEL_Y, 0, 1000)
-    #     time.sleep(2)
-    #     self.position(self.center['x'], self.center['y'])
-    #     print "centering x %d y %d" % (round(dutyX), round(dutyY))
+    def resetServos(self):
+        print "maxxing..."
+        self.pwm.set_pwm(CHANNEL_X, 0, 1000)
+        self.pwm.set_pwm(CHANNEL_Y, 0, 1000)
+        time.sleep(2)
+        self.position(self.center['x'], self.center['y'])
+        print "centering x %d y %d" % (round(dutyX), round(dutyY))
 
     def positionPercent(self, xPercent, yPercent):
         self.position(self.maxInputs['x'] * xPercent, self.maxInputs['y'] * yPercent)
