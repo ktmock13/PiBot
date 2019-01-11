@@ -8,7 +8,7 @@ import Adafruit_PCA9685
 CHANNEL_X = 3
 CHANNEL_Y = 11
 LASER_PIN = 37
-ROUGH_CENTER = (0, 0)
+ROUGH_CENTER = (200, 300)
 
 
 class LaserArm:
