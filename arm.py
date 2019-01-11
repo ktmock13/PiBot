@@ -38,7 +38,7 @@ class LaserArm:
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
         print "x %d y %d" % (round(dutyX), round(dutyY))
 
-    def resetServos(self, x, y):
+    def resetServos(self):
         dutyX = ((self.center['x']) - (((x / self.maxInputs['x']) * self.range['x'] * 2) - self.range['x']))
         dutyY = ((self.center['y']) + (((y / self.maxInputs['y']) * self.range['y'] * 2) - self.range['y']))
         print "maxxing  x %d y %d" % (round(dutyX), round(dutyY))
