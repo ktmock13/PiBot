@@ -37,7 +37,7 @@ class LaserArm:
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
 
     def directionalMove(self, direction):
-        if direction == 'L':
+        print (direction)
 
     def positionPercent(self, xPercent, yPercent):
         self.position(self.maxInputs['x'] * xPercent, self.maxInputs['y'] * yPercent)
