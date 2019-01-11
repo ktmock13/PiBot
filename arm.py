@@ -30,8 +30,6 @@ class LaserArm:
         GPIO.output(LASER_PIN, value)
 
     def position(self, x, y):
-        print "x %d y %d mouse input" % (x, y)
-
         dutyX = ((self.center['x']) - (((x / self.maxInputs['x']) * self.range['x'] * 2) - self.range['x']))
         dutyY = ((self.center['y']) + (((y / self.maxInputs['y']) * self.range['y'] * 2) - self.range['y']))
 
@@ -61,4 +59,5 @@ class LaserArm:
         self.range[axis] = abs(self.duties[axis] - self.center[axis])
 
     def motion(self, event):
+        print "x %d y %d mouse input" % (event.x, event.y)
         self.position(event.x, event.y)
