@@ -70,7 +70,7 @@ class OutputWindow:
                 xPercent = float(x+(w/2))/float(self.robot.eye.camera.resolution[0]);
                 yPercent = float(y+(h/2))/float(self.robot.eye.camera.resolution[1]);
                 cv2.rectangle(gray,(x,y),(x+w,y+h),(255,255,0),1)
-                print ('Face at percents...', xPercent, yPercent, 'Size...', w, ' x ' h)
+                print ('Face at percents...', xPercent, yPercent, 'Size...', w, ' x ', h)
                 self.robot.arm.positionPercent(xPercent,yPercent)
         else:
             for guideKey in guides:
