@@ -8,7 +8,7 @@ import Adafruit_PCA9685
 CHANNEL_X = 3
 CHANNEL_Y = 11
 LASER_PIN = 37
-ROUGH_CENTER = (240, 400)
+ROUGH_CENTER = (229, 415)
 
 
 class LaserArm:
@@ -23,7 +23,7 @@ class LaserArm:
         self.pwm.set_pwm_freq(60)
         self.maxInputs = { 'x': maxInputs[0], 'y': maxInputs[1] }
         self.center = { 'x': ROUGH_CENTER[0], 'y': ROUGH_CENTER[1] } # values to correct center
-        self.range = { 'x': 100, 'y': 100 }  # 'point' distance servo may deviate from center on X,Y axis = 100
+        self.range = { 'x': 54, 'y': 49 }  # 'point' distance servo may deviate from center on X,Y axis = 100
         self.duties = self.center
 
     def setLaser(self, value):
@@ -60,3 +60,10 @@ class LaserArm:
     def motion(self, event):
         print "x %d y %d mouse input" % (event.x, event.y)
         self.position(event.x, event.y)
+
+
+
+('maxInputs: ', {'y': 360.0, 'x': 480.0})
+('center: ', {'y': 415, 'x': 229})
+('range: ', {'y': 54, 'x': 49})
+('duties: ', {'y': 427, 'x': 221})
