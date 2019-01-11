@@ -39,7 +39,7 @@ class LaserArm:
         print "x %d y %d" % (round(dutyX), round(dutyY))
 
     def resetServos(self):
-        print "maxxing  x %d y %d" % (round(dutyX), round(dutyY))
+        print "maxxing..."
         self.pwm.set_pwm(CHANNEL_X, 0, 0)
         self.pwm.set_pwm(CHANNEL_Y, 0, 0)
         sleep(2);
