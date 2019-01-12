@@ -49,8 +49,10 @@ class Eye:
                     outputWindow.panel.configure(image=grayPhotoImg)
                     outputWindow.panel.image = grayPhotoImg
                 self.rawCapture.truncate(0)
-                if not self.running:
+                if not self.running or (cv2.waitKey(1) & 0xFF == ord('q')):
                     print("Break from videoloop")
+                    cv2.destroyAllWindows()
+                    self.camera.close()
                     break            
 
         except RuntimeError, e:
