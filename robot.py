@@ -9,6 +9,8 @@ from arm import LaserArm
 from eye import Eye
 from PIL import Image
 from PIL import ImageTk
+import sys
+
 
 INPUT_WINDOW_SIZE = (480.000, 368.000)
 CAM_RES = (480, 368)
@@ -126,3 +128,5 @@ class Robot:
         self.root.destroy()
         time.sleep(1)
         self.root.quit()
+        sleep(1)
+        sys.exit()
