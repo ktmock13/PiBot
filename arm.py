@@ -29,6 +29,9 @@ class LaserArm:
 
     def setLaser(self, value):
         GPIO.output(LASER_PIN, value)
+    
+    def amputate(self):
+        self.setLaser(0)
 
     def position(self, x, y):
         self.currentInput = { 'x': x, 'y': y } 

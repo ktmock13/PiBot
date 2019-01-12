@@ -119,5 +119,6 @@ class Robot:
 
     def kill(self):
         self.arm.setLaser(0)
+        self.eye.gouge()
         self.root.destroy()
         self.root.quit()

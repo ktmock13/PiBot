@@ -22,7 +22,7 @@ class Eye:
     def getCenter(self):
         return (self.xPercent, self.yPercent);
     
-    def stopBeingAlive(self):
+    def gouge(self):
         self.running = False
 
     def videoLoop(self, outputWindow):
@@ -51,14 +51,14 @@ class Eye:
                 self.rawCapture.truncate(0)
                 if self.running:
                     print("Break from videoloop")
-                    break
-                    
-            print("Destroying cv2 windows")
-            cv2.destroyAllWindows()
+                    break            
 
         except RuntimeError, e:
             print("[INFO] caught a RuntimeError")
 
         finally:
             print("Eye shutting down");
+            cv2.destroyAllWindows()
             self.camera.close()
+            
+
