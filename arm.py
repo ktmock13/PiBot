@@ -34,7 +34,7 @@ class LaserArm:
         self.setLaser(0)
 
     def position(self, x, y):
-        self.currentPercents = { 'x': x / self.maxInputs['x'], 'y': y / maxInputs['y'] } 
+        self.currentPercents = { 'x': x / self.maxInputs['x'], 'y': y / self.maxInputs['y'] } 
         dutyX = ((self.center['x']) - (((x / self.maxInputs['x']) * self.range['x'] * 2) - self.range['x']))
         dutyY = ((self.center['y']) + (((y / self.maxInputs['y']) * self.range['y'] * 2) - self.range['y']))
         self.pwm.set_pwm(CHANNEL_X, 0, int(round(dutyX)))
