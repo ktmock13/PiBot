@@ -96,7 +96,7 @@ class OutputWindow:
             cv2.putText(frame, '3. <y> capture y-edge', (topTextPos[0], topTextPos[1]+guideBoxSize*2+5), cv2.FONT_HERSHEY_SIMPLEX, .3, (255,255,255), 1) # place text over image
 
     def close_windows(self):
-        self.root.destroy()
+        self.robot.destroy()
 
 class Robot:
 
@@ -118,7 +118,7 @@ class Robot:
         self.root.mainloop()
 
     def kill(self):
-        self.arm.setLaser(0)
+        self.arm.amputate()
         self.eye.gouge()
         self.root.destroy()
         self.root.quit()
