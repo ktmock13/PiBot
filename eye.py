@@ -49,7 +49,7 @@ class Eye:
                     outputWindow.panel.configure(image=grayPhotoImg)
                     outputWindow.panel.image = grayPhotoImg
                 self.rawCapture.truncate(0)
-                if self.running:
+                if not self.running:
                     print("Break from videoloop")
                     break            
 
