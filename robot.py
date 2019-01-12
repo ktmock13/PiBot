@@ -118,8 +118,8 @@ class Robot:
         self.app = OutputWindow(Toplevel(self.root), self)
         self.root.mainloop()
 
-    def kill(self):
-        self.arm.amputate()
+    def kill(self):        
         self.eye.gouge()
+        self.arm.amputate()
         self.root.destroy()
         self.root.quit()
