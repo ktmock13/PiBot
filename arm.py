@@ -31,6 +31,7 @@ class LaserArm:
         GPIO.output(LASER_PIN, value)
     
     def amputate(self):
+        print("amputating arm")
         self.setLaser(0)
 
     def position(self, x, y):

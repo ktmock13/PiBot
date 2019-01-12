@@ -23,6 +23,7 @@ class Eye:
         return (self.xPercent, self.yPercent);
     
     def gouge(self):
+        print("gouging eye")
         self.running = False
 
     def videoLoop(self, outputWindow):
