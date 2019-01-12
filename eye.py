@@ -23,8 +23,9 @@ class Eye:
         return (self.xPercent, self.yPercent);
     
     def gouge(self):
-        print("gouging eye")
-        self.running = False
+        print("Eye shutting down");
+        cv2.destroyAllWindows()
+        self.camera.close()
 
     def videoLoop(self, outputWindow):
         try:
@@ -52,8 +53,7 @@ class Eye:
                 self.rawCapture.truncate(0)
                 if not self.running or (cv2.waitKey(1) & 0xFF == ord('q')):
                     print("Break from videoloop")
-                    cv2.destroyAllWindows()
-                    self.camera.close()
+                    self.gouge()
                     break            
 
         except RuntimeError, e:

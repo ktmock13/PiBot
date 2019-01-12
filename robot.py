@@ -128,5 +128,5 @@ class Robot:
         self.root.destroy()
         time.sleep(1)
         self.root.quit()
-        sleep(1)
+        time.sleep(1)
         sys.exit()
