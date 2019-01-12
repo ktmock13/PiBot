@@ -120,6 +120,9 @@ class Robot:
     def kill(self):      
         print("killing")  
         self.eye.gouge()
+        time.sleep(1)
         self.arm.amputate()
+        time.sleep(1)
         self.root.destroy()
+        time.sleep(1)
         self.root.quit()
