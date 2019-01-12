@@ -4,7 +4,6 @@ import time
 import os
 import cv2
 import threading
-from multiprocessing import Process, Manager
 from turret import TurretPlatform
 from arm import LaserArm
 from eye import Eye

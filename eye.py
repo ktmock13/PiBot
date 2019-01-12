@@ -45,6 +45,14 @@ class Eye:
                     outputWindow.panel.configure(image=grayPhotoImg)
                     outputWindow.panel.image = grayPhotoImg
                 self.rawCapture.truncate(0)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
+            cap.release()
+            cv2.destroyAllWindows()
 
         except RuntimeError, e:
             print("[INFO] caught a RuntimeError")
+
+        finally:
+            print("Eye shutting down");
+            self.camera.close()
