@@ -9,6 +9,7 @@ if __name__ == '__main__':
     def dont_explode(signal, frame):
         print("NOT EXPLODING, goodbye")
         dick.kill()
+        sleep(3)
         sys.exit(0)
 
     signal.signal(signal.SIGINT, dont_explode)
