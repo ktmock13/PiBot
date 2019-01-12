@@ -7,6 +7,7 @@ if __name__ == '__main__':
     dick = Robot()
 
     def dont_explode(signal, frame):
+        print("NOT EXPLODING, goodbye")
         dick.kill()
         sys.exit(0)
 

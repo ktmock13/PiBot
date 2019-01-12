@@ -10,8 +10,8 @@ from eye import Eye
 from PIL import Image
 from PIL import ImageTk
 
-INPUT_WINDOW_SIZE = (480.000, 360.000)
-CAM_RES = (480, 360)
+INPUT_WINDOW_SIZE = (480.000, 368.000)
+CAM_RES = (480, 368)
 
 class InputWindow:
     def __init__(self, robot):

@@ -46,8 +46,9 @@ class Eye:
                     outputWindow.panel.image = grayPhotoImg
                 self.rawCapture.truncate(0)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
+                    print("Break from videoloop")
                     break
-            cap.release()
+            print("Destroying cv2 windows")
             cv2.destroyAllWindows()
 
         except RuntimeError, e:
