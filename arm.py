@@ -49,6 +49,7 @@ class LaserArm:
         self.center = self.duties
     
     def printSettings(self):
+        print ('currentInputs:', self.currentInput)
         print ('maxInputs: ', self.maxInputs)
         print ('center: ', self.center)
         print ('range: ', self.range)
