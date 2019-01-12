@@ -17,9 +17,13 @@ class Eye:
         self.objectHeight = 50
         self.xPercent = resHeight/2;
         self.yPercent = resWidth/2;
+        self.running = True
 
     def getCenter(self):
         return (self.xPercent, self.yPercent);
+    
+    def stopBeingAlive(self):
+        self.running = False
 
     def videoLoop(self, outputWindow):
         try:
@@ -45,9 +49,10 @@ class Eye:
                     outputWindow.panel.configure(image=grayPhotoImg)
                     outputWindow.panel.image = grayPhotoImg
                 self.rawCapture.truncate(0)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
+                if self.running:
                     print("Break from videoloop")
                     break
+                    
             print("Destroying cv2 windows")
             cv2.destroyAllWindows()
 
