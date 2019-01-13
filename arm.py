@@ -65,7 +65,7 @@ class LaserArm:
         self.center = self.duties
     
     def goToCenter(self):
-        self.setPosition(self.maxInputs['x']/2, self.maxInputs['y']/2)
+        self.position(self.maxInputs['x']/2, self.maxInputs['y']/2)
     
     def printSettings(self):
         print ('currentPercents:', self.currentPercents)
