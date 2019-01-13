@@ -44,9 +44,9 @@ class LaserArm:
 
     def directionalMove(self, direction):
         if direction == 'L':
-            self.setDuties(self.duties['x'] - 5, self.duties['y'])
-        if direction == 'R':
             self.setDuties(self.duties['x'] + 5, self.duties['y'])
+        if direction == 'R':
+            self.setDuties(self.duties['x'] - 5, self.duties['y'])
         if direction == 'U':
             self.setDuties(self.duties['x'], self.duties['y'] - 5)
         if direction == 'D':
