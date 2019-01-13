@@ -43,7 +43,6 @@ class LaserArm:
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
 
     def directionalMove(self, direction):
-        def directionalMove(self, direction):
         if direction == 'L':
             self.setDuties(self.duties['x'] + 5, self.duties['y'])
         if direction == 'R':
