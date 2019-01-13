@@ -38,8 +38,8 @@ class LaserArm:
         self.currentPercents = { 'x': x / self.maxInputs['x'], 'y': y / self.maxInputs['y'] } 
         dutyX = ((self.center['x']) - (((x / self.maxInputs['x']) * self.range['x'] * 2) - self.range['x'])) +100
         dutyY = ((self.center['y']) + (((y / self.maxInputs['y']) * self.range['y'] * 2) - self.range['y'])) +100
-        self.pwm.set_pwm(CHANNEL_X, 500, int(round(dutyX)))
-        self.pwm.set_pwm(CHANNEL_Y, 500, int(round(dutyY)))
+        self.pwm.set_pwm(CHANNEL_X, 50, int(round(dutyX)))
+        self.pwm.set_pwm(CHANNEL_Y, 50, int(round(dutyY)))
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
 
     def directionalMove(self, direction):
