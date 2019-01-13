@@ -8,7 +8,7 @@ import Adafruit_PCA9685
 CHANNEL_X = 3
 CHANNEL_Y = 11
 LASER_PIN = 37
-ROUGH_CENTER = (50, 200)
+ROUGH_CENTER = (20, 200)
 
 
 class LaserArm:
@@ -43,7 +43,14 @@ class LaserArm:
         self.duties = { 'x': int(round(dutyX)), 'y': int(round(dutyY))}
 
     def directionalMove(self, direction):
-        positionPercent()
+        if direction == 'L':
+            self.setDuties(self.duties['x'] - 5, self.duties['y'])
+        if direction == 'R':
+            self.setDuties(self.duties['x'] + 5, self.duties['y'])
+        if direction == 'U':
+            self.setDuties(self.duties['x'], self.duties['y'] - 5)
+        if direction == 'D':
+            self.setDuties(self.duties['x'], self.duties['y'] + 5)
         print (direction)
 
     def positionPercent(self, xPercent, yPercent):
@@ -51,6 +58,12 @@ class LaserArm:
 
     def captureCenter(self):
         self.center = self.duties
+
+    def setDuties(self, x, y):
+        self.duties = { 'x': x, 'y': y}
+        self.pwm.set_pwm(CHANNEL_X, 0, x)
+        self.pwm.set_pwm(CHANNEL_Y, 0, y)
+
     
     def printSettings(self):
         print ('currentPercents:', self.currentPercents)
