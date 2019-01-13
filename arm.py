@@ -8,7 +8,7 @@ import Adafruit_PCA9685
 CHANNEL_X = 3
 CHANNEL_Y = 11
 LASER_PIN = 37
-ROUGH_CENTER = (211, 400)
+ROUGH_CENTER = (211, 350)
 
 
 class LaserArm:
@@ -63,6 +63,9 @@ class LaserArm:
 
     def captureCenter(self):
         self.center = self.duties
+    
+    def goToCenter(self):
+        self.setPosition(self.maxInputs['x']/2, self.maxInputs['y']/2)
     
     def printSettings(self):
         print ('currentPercents:', self.currentPercents)
