@@ -52,6 +52,11 @@ class LaserArm:
         if direction == 'D':
             self.setDuties(self.duties['x'], self.duties['y'] + 5)
         print (direction)
+    
+    def setDuties(self, x, y):
+        self.pwm.set_pwm(CHANNEL_X, 0, x)
+        self.pwm.set_pwm(CHANNEL_Y, 0, y)
+        self.duties = { 'x': x, 'y': y }
 
     def positionPercent(self, xPercent, yPercent):
         self.position(self.maxInputs['x'] * xPercent, self.maxInputs['y'] * yPercent)
