@@ -5,7 +5,7 @@ from gpiozero import OutputDevice as stepper
 IN1 = stepper(23)
 IN2 = stepper(18)
 IN3 = stepper(15)
-IN4 = stepper(18)
+IN4 = stepper(14)
 StepPins = [IN1, IN2, IN3, IN4]
 
 # Define sequence
