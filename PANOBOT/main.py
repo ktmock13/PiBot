@@ -11,13 +11,9 @@ StepPins = [IN1, IN2, IN3, IN4]
 # Define sequence
 # as shown in manufacturers datasheet
 Seq = [[1, 0, 0, 1],
-       [1, 0, 0, 0],
        [1, 1, 0, 0],
-       [0, 1, 0, 0],
        [0, 1, 1, 0],
-       [0, 0, 1, 0],
-       [0, 0, 1, 1],
-       [0, 0, 0, 1]]
+       [0, 0, 1, 1]]
 
 StepCount = len(Seq)
 StepDir = 1
