@@ -1,47 +1,46 @@
-from gpiozero import Robot
-import curses
-from gpiozero import LED
-from time import sleep
+# Import required libraries
+import time
+from gpiozero import OutputDevice as stepper
 
-led = LED(2)
+IN1 = stepper(23)
+IN2 = stepper(18)
+IN3 = stepper(15)
+IN4 = stepper(18)
+StepPins = [IN1, IN2, IN3, IN4]
+
+# Define sequence
+# as shown in manufacturers datasheet
+Seq = [[1, 0, 0, 1],
+       [1, 0, 0, 0],
+       [1, 1, 0, 0],
+       [0, 1, 0, 0],
+       [0, 1, 1, 0],
+       [0, 0, 1, 0],
+       [0, 0, 1, 1],
+       [0, 0, 0, 1]]
+
+StepCount = len(Seq)
+StepDir = 1
+WaitTime = 0.01
+StepCounter = 0
 
 while True:
-    led.off()
-    sleep(.1)
-    led.on()
-    sleep(1)
 
-
-robot = Robot(left=(4, 14), right=(17, 18))
-
-actions = {
-    curses.KEY_UP:    robot.forward,
-    curses.KEY_DOWN:  robot.backward,
-    curses.KEY_LEFT:  robot.left,
-    curses.KEY_RIGHT: robot.right,
-}
-
-
-def main(window):
-    next_key = None
-    while True:
-        curses.halfdelay(1)
-        if next_key is None:
-            key = window.getch()
+    print(StepCounter)
+    print(Seq[StepCounter])
+    for pin in range(0, 4):
+        xpin = StepPins[pin]
+        if Seq[StepCounter][pin] != 0:
+            xpin.on()
         else:
-            key = next_key
-            next_key = None
-        if key != -1:
-            # KEY PRESSED
-            curses.halfdelay(3)
-            action = actions.get(key)
-            if action is not None:
-                action()
-            next_key = key
-            while next_key == key:
-                next_key = window.getch()
-            # KEY RELEASED
-            robot.stop()
+            xpin.off()
 
-
-curses.wrapper(main)
+    StepCounter += StepDir
+    # If we reach the end of the sequence
+    # start again
+    if (StepCounter >= StepCount):
+        StepCounter = 0
+    if (StepCounter < 0):
+        StepCounter = StepCount+StepDir
+    # Wait before moving on
+    time.sleep(WaitTime)
