@@ -16,7 +16,7 @@ Seq = [[1, 0, 0, 1],
        [0, 0, 1, 1]]
 
 StepCount = len(Seq)
-StepDir = -1
+StepDir = 1
 WaitTime = 0.004
 StepCounter = 0
 
